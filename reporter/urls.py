@@ -1,6 +1,6 @@
 from django.conf.urls import include,url
 
-from views import HomePageView, county_datasets,point_datasets
+from .views import HomePageView, county_datasets,point_datasets
 
 urlpatterns = [
 	url(r'^$', HomePageView.as_view(), name = 'home'),
