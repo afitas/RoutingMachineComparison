@@ -16,9 +16,10 @@
 	<script type="text/javascript" src="{% static 'dist/leaflet.ajax.js' %}" >	</script>
 	<script type="text/javascript" src="{% static 'leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.js' %}" ></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script type="text/javascript" src="{% static 'js/easy-button.js' %}" ></script>	
+	<!-- <script type="text/javascript" src="{% static 'js/easy-button.js' %}" ></script>	 -->
 </head>
 <script type="text/javascript" src="{% static 'routing/leaflet-routing-machine.js' %}" ></script>
+<script type="text/javascript" src="http://www.liedman.net/lrm-graphhopper/dist/lrm-graphhopper-1.2.0.min.js"></script>
 <body>
 <h3>Am a hero. Am learning Geodjango </h3>
 <script type="text/javascript">
@@ -27,16 +28,15 @@ $("#printBtn").click(function(){
 });
 </script>
 <br>
+
 <script type="text/javascript">
 	function our_layers(map,options){
-		var osm = L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-				maxZoom: 19,
-				attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-			});
-		var OpenTopoMap = L.tileLayer('http://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
-			maxZoom: 17,
-			attribution: 'Map data: &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
-		});
+		var osm = "http://{s}.tile.openstreetmap.org/{z}{y}{x}.png";
+		
+		// var L = require('leaflet');
+		// require('leaflet-routing-machine');
+		// require('lrm-graphhopper');
+		
 		var datasets = new L.GeoJSON.AJAX("{% url 'county' %}",{
 			style: function colors(feature){
 				switch(feature.properties.counties){
@@ -79,50 +79,39 @@ $("#printBtn").click(function(){
 			}
 
 		});
-
 		// datasets.addTo(map);
-		points.addTo(map);
-		
+		// points.addTo(map);
 
-		var baseLayers = {
-			"OSM": osm,
-			"OpenTopoMap":OpenTopoMap
-		}
+		// var baseLayers = {
+		// 	"OSM":osm
+		// }
 
-		var groupedOverlays = {
-		  "Layers": {
-		    "counties": datasets,
-		    "incidences": points
-		  }
+		// var groupedOverlays = {
+		// 	"Layers":{
+		// 		"county": datasets,
+		// 		"incidences": points,
+		// 	}
+		// };
 
-		};
-
-		L.control.groupedLayers(baseLayers, groupedOverlays).addTo(map);
+		// L.control.groupedLayers(baseLayers, groupedOverlays).addTo(map);
 
 		var routing =  L.Routing.control({
 		  waypoints: [
-		    L.latLng(-0.23, 36.87),
-		    L.latLng(0.23, 37.64)
-		  ]
+		  	L.latLng(35.8507, -0.3129),
+		    L.latLng(35.7045, -0.632057, )
+		  ],
+		  lineOptions: {
+            styles: [
+                {color: 'green', opacity: 0.9, weight: 9},
+            ]
+        },
+		//   router: L.Routing.graphHopper('cc275743-d4e2-43c2-8d1a-ad7e1fd1c6ad'),
 		});
+		routing.addTo(map)
 
-		L.easyButton('fa-compass',
-		  function (){
-		    $('.leaflet-routing-container').is(':visible') ? routing.removeFrom(map) : routing.addTo(map)
-		  },
-		  'Routing'
-		).addTo(map);
-
-
-		function createButton(label, container) {
-		    var btn = L.DomUtil.create('button', '', container);
-		    btn.setAttribute('type', 'button');
-		    btn.innerHTML = label;
-		    return btn;
-		}
+		console.log(routing)
 
 	}
-
 </script>
 {% leaflet_map "gis" callback="window.our_layers" %}
 </body>

@@ -131,10 +131,10 @@ STATICFILES_DIRS =(
 )
 
 LEAFLET_CONFIG = {
-    'DEFAULT_CENTER': (-.023, 36.87),
-    'DEFAULT_ZOOM': 5,
+    'DEFAULT_CENTER': (35.704, -0.632),
+    'DEFAULT_ZOOM': 10,
     'MAX_ZOOM': 20,
     'MIN_ZOOM':3,
     'SCALE': 'both',
-    'ATTRIBUTION_PREFIX': 'Inspired by Life in GIS'
+    'ATTRIBUTION_PREFIX': 'Powred by CTS Arzew'
 }
